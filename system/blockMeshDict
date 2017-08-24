@@ -2,7 +2,7 @@
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
 |  \\    /   O peration     | Version:  dev                                   |
-|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|   \\  /    A nd           | Web:      http://www.cfdyna.com                 |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
 FoamFile
@@ -14,164 +14,86 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-geometry
-{
-    cylinder
-    {
-        type searchableCylinder;
-        point1 (0 -4 0);
-        point2 (0 4 0);
-        radius 0.7;
-    }
-    cylinder3
-    {
-        type searchableCylinder;
-        point1 (-10 0.4 0);
-        point2 (10 0.4 0);
-        radius 0.5;
-    }
-    cylinder2
-    {
-        type    searchableExtrudedCircle;
-        file    "curve2.vtk";
-        radius  0.5;
-    }
-    inletPlane
-    {
-        type    searchablePlate;
-        origin  (-4 -50 -50);
-        span    (0 100 100);
-    }
-}
+convertToMeters 0.001;
 
 vertices
 (
-    // Vertical cylinder
-    name v0 project (-1 -0.1 -1) (cylinder cylinder2)
-    name v1 project ( 1 -0.1 -1) (cylinder)
-    name v2 project ( 1  0.9 -1) (cylinder)
-    name v3 project (-1  0.9 -1) (cylinder cylinder2)
-    name v4 project (-1 -0.1  1) (cylinder cylinder2)
-    name v5 project ( 1 -0.1  1) (cylinder)
-    name v6 project ( 1  0.9  1) (cylinder)
-    name v7 project (-1  0.9  1) (cylinder cylinder2)
-
-
-    // Horizontal cylinder
-    name v8  project (-4  0 -0.5) (cylinder2 inletPlane)
-    name v9  project (-4  1 -0.5) (cylinder2 inletPlane)
-    name v10 project (-4  0  0.5) (cylinder2 inletPlane)
-    name v11 project (-4  1  0.5) (cylinder2 inletPlane)
-
-
-    // On top of vertical cylinder
-    name v12 project (-1 2 -1) (cylinder)
-    name v13 project ( 1 2 -1) (cylinder)
-    name v14 project ( 1 2  1) (cylinder)
-    name v15 project (-1 2  1) (cylinder)
-
-    // Below vertical cylinder
-    name v16 project (-1 -1 -1) (cylinder)
-    name v17 project ( 1 -1 -1) (cylinder)
-    name v18 project ( 1 -1  1) (cylinder)
-    name v19 project (-1 -1  1) (cylinder)
+    (-10     10      0)      // 0
+    (-10    -10      0)      // 1
+    ( 10    -10      0)      // 2
+    ( 10     10      0)      // 3
+    (-17.68  17.68   0)      // 4
+    (-17.68 -17.68   0)      // 5
+    ( 17.68 -17.68   0)      // 6
+    ( 17.68  17.68   0)      // 7
+    (-10     10      1000)   // 8
+    (-10    -10      1000)   // 9
+    ( 10    -10      1000)   // 10
+    ( 10     10      1000)   // 11
+    (-17.68  17.68   1000)   // 12
+    (-17.68 -17.68   1000)   // 13
+    ( 17.68 -17.68   1000)   // 14
+    ( 17.68  17.68   1000)   // 15
 );
 
 blocks
 (
-    hex (v0 v1 v2 v3 v4 v5 v6 v7) (8 8 8) simpleGrading (1 1 1)
-    name sideBlock hex (v0 v3 v9 v8 v4 v7 v11 v10) (8 20 8)
-        simpleGrading (1 1 1)
-
-    hex ( v7 v6 v2 v3 v15 v14 v13 v12) (8 8 8) simpleGrading (1 1 1)
-    hex (v16 v19 v18 v17 v0 v4 v5 v1) (8 8 8) simpleGrading (1 1 1)
+    hex (0 1 2 3   8  9 10  11) (10 10 200) simpleGrading (1 1 1)
+    hex (0 4 5 1   8  12 13 9 ) (10 10 200) simpleGrading (0.5 1 1)
+    hex (1 5 6 2   9  13 14 10) (10 10 200) simpleGrading (0.5 1 1)
+    hex (2 6 7 3   10 14 15 11) (10 10 200) simpleGrading (0.5 1 1)
+    hex (3 7 4 0   11 15 12 8 ) (10 10 200) simpleGrading (0.5 1 1)
 );
 
 edges
 (
-    project v0 v1 (cylinder)
-    project v1 v2 (cylinder)
-    project v2 v3 (cylinder)
-
-    project v1 v5 (cylinder)
-    project v2 v6 (cylinder)
-
-    project v4 v5 (cylinder)
-    project v5 v6 (cylinder)
-    project v6 v7 (cylinder)
-
-    // Common face
-    project v3 v0 (cylinder cylinder2)
-    project v3 v7 (cylinder cylinder2)
-    project v7 v4 (cylinder cylinder2)
-    project v0 v4 (cylinder cylinder2)
-
-    // Inlet
-    project v8 v10 (cylinder2 inletPlane)
-    project v10 v11 (cylinder2 inletPlane)
-    project v11 v9 (cylinder2 inletPlane)
-    project v9 v8 (cylinder2 inletPlane)
-
-    // Sides of horizontal cylinder. Use projectCurve to do interpolation
-    // for radial direction to keep points along edges at constant radial
-    // direction.
-    projectCurve v8  v0 (cylinder2)
-    projectCurve v9  v3 (cylinder2)
-    projectCurve v11 v7 (cylinder2)
-    projectCurve v10 v4 (cylinder2)
-
-
-
-    // Top cylinder
-    project v12 v15 (cylinder)
-    project v15 v14 (cylinder)
-    project v14 v13 (cylinder)
-    project v13 v12 (cylinder)
-
-    // Bottom cylinder
-    project v16 v17 (cylinder)
-    project v17 v18 (cylinder)
-    project v18 v19 (cylinder)
-    project v19 v16 (cylinder)
+    arc 4  5  (-25  0   0)
+    arc 5  6  ( 0  -25  0)
+    arc 6  7  ( 25  0   0)
+    arc 7  4  ( 0   25  0)
+    arc 12 13 (-25  0   1000)
+    arc 13 14 ( 0  -25  1000)
+    arc 14 15 ( 25  0   1000)
+    arc 15 12 ( 0   25  1000)
 );
-
-faces
-(
-    // Common face
-    project (v0 v4 v7 v3) cylinder
-
-    project (v8 v0 v4 v10) cylinder2
-    project (v10 v4 v7 v11) cylinder2
-    project (v11 v7 v3 v9) cylinder2
-    project (v8 v9 v3 v0) cylinder2
-);
-
 
 defaultPatch
 {
-    name walls;
+    name wall;
     type wall;
 }
 
 boundary
 (
-    side
-    {
-        type    patch;
-        faces   ((sideBlock 3));   //((v8 v10 v11 v9));
-    }
-
     inlet
     {
-        type    patch;
-        faces   ((v17 v18 v19 v16));
+        type patch;
+        faces
+        (
+            (0 1 2 3)
+            (0 4 5 1)
+            (1 5 6 2)
+            (2 6 7 3)
+            (3 7 4 0)
+        );
     }
-
     outlet
     {
-        type    patch;
-        faces   ((v12 v15 v14 v13));
+        type patch;
+        faces
+        (
+            (8  9  10 11)
+            (8  12 13 9)
+            (9  13 14 10)
+            (10 14 15 11)
+            (11 15 12 8)
+        );
     }
+
+);
+
+mergePatchPairs
+(
 );
 
 // ************************************************************************* //
