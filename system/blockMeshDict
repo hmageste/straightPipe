@@ -14,26 +14,30 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-convertToMeters 0.001;
+convertToMeters 1;
+
+length 20;
+radius 0.5;
+in_mesh 0.2;
 
 vertices
 (
-    (-10     10      0)      // 0
-    (-10    -10      0)      // 1
-    ( 10    -10      0)      // 2
-    ( 10     10      0)      // 3
-    (-17.68  17.68   0)      // 4
-    (-17.68 -17.68   0)      // 5
-    ( 17.68 -17.68   0)      // 6
-    ( 17.68  17.68   0)      // 7
-    (-10     10      1000)   // 8
-    (-10    -10      1000)   // 9
-    ( 10    -10      1000)   // 10
-    ( 10     10      1000)   // 11
-    (-17.68  17.68   1000)   // 12
-    (-17.68 -17.68   1000)   // 13
-    ( 17.68 -17.68   1000)   // 14
-    ( 17.68  17.68   1000)   // 15
+    (#calc "-1.0*$in_mesh"          $in_mesh                              0) // 0
+    (#calc "-1.0*$in_mesh"          #calc "-1.0*$in_mesh"                 0) // 1
+    ($in_mesh                       #calc "-1.0*$in_mesh"                 0) // 2
+    ($in_mesh                       $in_mesh                              0) // 3
+    (#calc "-1.0*$radius/sqrt(2.0)" #calc "$radius/sqrt(2.0)"             0) // 4
+    (#calc "-1.0*$radius/sqrt(2.0)" #calc "-1.0*$radius/sqrt(2.0)"        0) // 5
+    (#calc "$radius/sqrt(2.0)"      #calc "-1.0*$radius/sqrt(2.0)"        0) // 6
+    (#calc "$radius/sqrt(2.0)"      #calc "$radius/sqrt(2.0)"             0) // 7
+    (#calc "-1.0*$in_mesh"          $in_mesh                        $length) // 8
+    (#calc "-1.0*$in_mesh"          #calc "-1.0*$in_mesh"           $length) // 9
+    ($in_mesh                       #calc "-1.0*$in_mesh"           $length) // 10
+    ($in_mesh                       $in_mesh                        $length) // 11
+    (#calc "-1.0*$radius/sqrt(2.0)" #calc "$radius/sqrt(2.0)"       $length) // 12
+    (#calc "-1.0*$radius/sqrt(2.0)" #calc "-1.0*$radius/sqrt(2.0)"  $length) // 13
+    (#calc "$radius/sqrt(2.0)"      #calc "-1.0*$radius/sqrt(2.0)"  $length) // 14
+    (#calc "$radius/sqrt(2.0)"      #calc "$radius/sqrt(2.0)"       $length) // 15
 );
 
 blocks
@@ -47,14 +51,14 @@ blocks
 
 edges
 (
-    arc 4  5  (-25  0   0)
-    arc 5  6  ( 0  -25  0)
-    arc 6  7  ( 25  0   0)
-    arc 7  4  ( 0   25  0)
-    arc 12 13 (-25  0   1000)
-    arc 13 14 ( 0  -25  1000)
-    arc 14 15 ( 25  0   1000)
-    arc 15 12 ( 0   25  1000)
+    arc 4  5  (#calc "-1.0*$radius"  0                          0)
+    arc 5  6  (0                    #calc "-1.0*$radius"        0)
+    arc 6  7  ($radius              0                           0)
+    arc 7  4  (0                    $radius                     0)
+    arc 12 13 (#calc "-1.0*$radius" 0                     $length)
+    arc 13 14 (0                    #calc "-1.0*$radius"  $length)
+    arc 14 15 ($radius              0                     $length)
+    arc 15 12 (0                    $radius               $length)
 );
 
 defaultPatch
