@@ -22,22 +22,22 @@ in_mesh 0.2;
 
 vertices
 (
-    (#calc "-1.0*$in_mesh"          $in_mesh                              0) // 0
-    (#calc "-1.0*$in_mesh"          #calc "-1.0*$in_mesh"                 0) // 1
-    ($in_mesh                       #calc "-1.0*$in_mesh"                 0) // 2
-    ($in_mesh                       $in_mesh                              0) // 3
-    (#calc "-1.0*$radius/sqrt(2.0)" #calc "$radius/sqrt(2.0)"             0) // 4
-    (#calc "-1.0*$radius/sqrt(2.0)" #calc "-1.0*$radius/sqrt(2.0)"        0) // 5
-    (#calc "$radius/sqrt(2.0)"      #calc "-1.0*$radius/sqrt(2.0)"        0) // 6
-    (#calc "$radius/sqrt(2.0)"      #calc "$radius/sqrt(2.0)"             0) // 7
-    (#calc "-1.0*$in_mesh"          $in_mesh                        $length) // 8
-    (#calc "-1.0*$in_mesh"          #calc "-1.0*$in_mesh"           $length) // 9
-    ($in_mesh                       #calc "-1.0*$in_mesh"           $length) // 10
-    ($in_mesh                       $in_mesh                        $length) // 11
-    (#calc "-1.0*$radius/sqrt(2.0)" #calc "$radius/sqrt(2.0)"       $length) // 12
-    (#calc "-1.0*$radius/sqrt(2.0)" #calc "-1.0*$radius/sqrt(2.0)"  $length) // 13
-    (#calc "$radius/sqrt(2.0)"      #calc "-1.0*$radius/sqrt(2.0)"  $length) // 14
-    (#calc "$radius/sqrt(2.0)"      #calc "$radius/sqrt(2.0)"       $length) // 15
+    (0		#calc "-1.0*$in_mesh"          $in_mesh                      ) // 0
+    (0		#calc "-1.0*$in_mesh"          #calc "-1.0*$in_mesh"         ) // 1
+    (0		$in_mesh                       #calc "-1.0*$in_mesh"         ) // 2
+    (0		$in_mesh                       $in_mesh                      ) // 3
+    (0		#calc "-1.0*$radius/sqrt(2.0)" #calc "$radius/sqrt(2.0)"     ) // 4
+    (0		#calc "-1.0*$radius/sqrt(2.0)" #calc "-1.0*$radius/sqrt(2.0)") // 5
+    (0		#calc "$radius/sqrt(2.0)"      #calc "-1.0*$radius/sqrt(2.0)") // 6
+    (0		#calc "$radius/sqrt(2.0)"      #calc "$radius/sqrt(2.0)"     ) // 7
+    ($length	#calc "-1.0*$in_mesh"          $in_mesh                      ) // 8
+    ($length	#calc "-1.0*$in_mesh"          #calc "-1.0*$in_mesh"         ) // 9
+    ($length	$in_mesh                       #calc "-1.0*$in_mesh"         ) // 10
+    ($length	$in_mesh                       $in_mesh                      ) // 11
+    ($length	#calc "-1.0*$radius/sqrt(2.0)" #calc "$radius/sqrt(2.0)"     ) // 12
+    ($length	#calc "-1.0*$radius/sqrt(2.0)" #calc "-1.0*$radius/sqrt(2.0)") // 13
+    ($length	#calc "$radius/sqrt(2.0)"      #calc "-1.0*$radius/sqrt(2.0)") // 14
+    ($length	#calc "$radius/sqrt(2.0)"      #calc "$radius/sqrt(2.0)"     ) // 15
 );
 
 blocks
@@ -51,14 +51,14 @@ blocks
 
 edges
 (
-    arc 4  5  (#calc "-1.0*$radius"  0                          0)
-    arc 5  6  (0                    #calc "-1.0*$radius"        0)
-    arc 6  7  ($radius              0                           0)
-    arc 7  4  (0                    $radius                     0)
-    arc 12 13 (#calc "-1.0*$radius" 0                     $length)
-    arc 13 14 (0                    #calc "-1.0*$radius"  $length)
-    arc 14 15 ($radius              0                     $length)
-    arc 15 12 (0                    $radius               $length)
+    arc 4  5  (0	#calc "-1.0*$radius"  0                  )
+    arc 5  6  (0	0                    #calc "-1.0*$radius")
+    arc 6  7  (0	$radius              0                   )
+    arc 7  4  (0	0                    $radius             )
+    arc 12 13 ($length	#calc "-1.0*$radius" 0                   )
+    arc 13 14 ($length	0                    #calc "-1.0*$radius")
+    arc 14 15 ($length	$radius              0                   )
+    arc 15 12 ($length	0                    $radius             )
 );
 
 defaultPatch
@@ -74,11 +74,11 @@ boundary
         type patch;
         faces
         (
-            (0 1 2 3)
-            (0 4 5 1)
-            (1 5 6 2)
-            (2 6 7 3)
-            (3 7 4 0)
+            (0 3 2 1)
+            (1 5 4 0)
+            (2 6 5 1)
+            (3 7 6 2)
+            (0 4 7 3)
         );
     }
     outlet

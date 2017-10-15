@@ -32,9 +32,9 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         1;
+endTime         4;
 
-deltaT          0.0125;
+deltaT          0.125;
 
 writeControl    timeStep;
 
